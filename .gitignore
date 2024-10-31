@@ -32,7 +32,6 @@ wheels/
 .installed.cfg
 *.egg
 .conda
-src/*.egg-info
 
 # Installer logs
 pip-log.txt
