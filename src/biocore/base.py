@@ -2,13 +2,14 @@ import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, List, MutableMapping, Optional, Union
 
-import numpy as np
-import pandas as pd
-import pandas.api.types as pdt
 import pyarrow as pa
 
 import biocore.utils.logging
+import numpy as np
+import pandas as pd
+import pandas.api.types as pdt
 from biocore.utils.import_util import (
+    is_biosets_available,
     is_datasets_available,
     is_polars_available,
     is_ray_available,
@@ -40,6 +41,11 @@ def get_data_format(data):
             return "polars"
     if isinstance(data, (pa.Table, pa.Array, pa.ChunkedArray)):
         return "arrow"
+    if is_biosets_available():
+        from biosets import Bioset
+
+        if isinstance(data, Bioset):
+            return "bioset"
     if is_datasets_available():
         from datasets import Dataset, IterableDataset
 
@@ -90,6 +96,8 @@ class BaseDataConverter:
             "ids": self.to_iterabledataset,
             "iterabledataset": self.to_iterabledataset,
             "iterable": self.to_iterabledataset,
+            "bioset": self.to_bioset,
+            "bs": self.to_bioset,
             "io": self.to_file,
             "dask": self.to_dask,
             "ray": self.to_ray,
@@ -122,6 +130,9 @@ class BaseDataConverter:
         raise NotImplementedError()
 
     def to_dataset(self, X, **kwargs):
+        raise NotImplementedError()
+
+    def to_bioset(self, X, **kwargs):
         raise NotImplementedError()
 
     def to_iterabledataset(self, X, **kwargs):

@@ -63,7 +63,16 @@ class DaskConverter(BaseDataConverter):
         return pa.Table.from_pandas(X.compute(), **pa_table_from_pandas_kwargs(kwargs))
 
     def to_dataset(self, X: "dd.DataFrame", **kwargs):
-        from biocore import Bioset
+        requires_backends(self.to_dataset, "datasets")
+        from datasets import Dataset
+
+        return Dataset.from_pandas(
+            X.compute(), **get_kwargs(kwargs, Dataset.from_pandas)
+        )
+
+    def to_bioset(self, X: "dd.DataFrame", **kwargs):
+        requires_backends(self.to_dataset, "bioset")
+        from biosets import Bioset
 
         return Bioset.from_pandas(X.compute(), **get_kwargs(kwargs, Bioset.from_pandas))
 

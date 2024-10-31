@@ -30,6 +30,7 @@ from .row_dict import RowDictConverter
 
 if TYPE_CHECKING:
     from datasets import Dataset, IterableDataset
+    from biosets import Bioset
 
     import polars as pl
     import ray.data.dataset
@@ -62,8 +63,8 @@ if is_datasets_available():
     _FORMAT_TO_CONVERTER["iterable"] = IterableDatasetConverter()
     _FORMAT_TO_CONVERTER["ids"] = IterableDatasetConverter()
 if is_biosets_available():
-    _FORMAT_TO_CONVERTER["bs"] = DatasetConverter()
     _FORMAT_TO_CONVERTER["bioset"] = DatasetConverter()
+    _FORMAT_TO_CONVERTER["bs"] = DatasetConverter()
 
 
 SHORT_TO_LONG_FORMAT_NAMES = {
@@ -72,6 +73,7 @@ SHORT_TO_LONG_FORMAT_NAMES = {
     "pl": "polars",
     "ds": "dataset",
     "ids": "iterabledataset",
+    "bs": "bioset",
 }
 
 
@@ -247,6 +249,21 @@ class DataHandler:
         return DataHandler.to_format(
             X,
             target_format="dataset",
+            input_columns=input_columns,
+            streaming=streaming,
+            **kwargs,
+        )
+
+    @staticmethod
+    def to_bioset(
+        X,
+        input_columns=None,
+        streaming=None,
+        **kwargs,
+    ) -> "Bioset":
+        return DataHandler.to_format(
+            X,
+            target_format="bioset",
             input_columns=input_columns,
             streaming=streaming,
             **kwargs,

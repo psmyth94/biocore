@@ -76,9 +76,16 @@ class DictConverter(BaseDataConverter):
         return pa.table(X)
 
     def to_dataset(self, X: Dict[str, list], **kwargs):
-        from biocore import Dataset
+        requires_backends(self.to_dataset, "datasets")
+        from datasets import Dataset
 
         return Dataset.from_dict(X, **get_kwargs(kwargs, Dataset.from_dict))
+
+    def to_bioset(self, X: Dict[str, list], **kwargs):
+        requires_backends(self.to_dataset, "biosets")
+        from biosets import Bioset
+
+        return Bioset.from_dict(X, **get_kwargs(kwargs, Bioset.from_dict))
 
     def to_iterabledataset(self, X: Dict[str, list], **kwargs):
         requires_backends(self.to_iterabledataset, "datasets")

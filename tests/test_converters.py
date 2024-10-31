@@ -68,7 +68,7 @@ def test_arrow_converter(format):
 @require_biosets
 @pytest.mark.parametrize("format", _FORMAT_TO_CONVERTER.keys())
 def test_dataset_converter(format):
-    from biocore import Bioset
+    from biosets import Bioset
 
     try:
         kwargs = {}

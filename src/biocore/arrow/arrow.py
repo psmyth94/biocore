@@ -1,9 +1,9 @@
 from typing import List, Union
 
-import numpy as np
 import pyarrow as pa
 import pyarrow.compute as pc
 
+import numpy as np
 from biocore.utils.import_util import (
     is_biosets_available,
     is_datasets_available,
@@ -134,11 +134,17 @@ class ArrowConverter(BaseDataConverter):
         return X.to_pylist()
 
     def to_dataset(self, X: Union[pa.Array, pa.ChunkedArray, pa.Table], **kwargs):
+        requires_backends(self.to_dataset, "datasets")
+        from datasets import Dataset
+
         return Dataset(X, **get_kwargs(kwargs, Dataset.__init__))
 
     def to_iterabledataset(
         self, X: Union[pa.Array, pa.ChunkedArray, pa.Table], **kwargs
     ):
+        requires_backends(self.to_iterabledataset, "datasets")
+        from datasets import IterableDataset
+
         def gen(X):
             for row in X.to_pylist():
                 yield row
@@ -216,9 +222,8 @@ class ArrowConverter(BaseDataConverter):
         if columns:
             return X.select(columns)
         if feature_type and is_datasets_available() and is_biosets_available():
-            from datasets import Features
-
             from biosets.integration import DatasetsPatcher
+            from datasets import Features
 
             with DatasetsPatcher():
                 features = Features.from_arrow_schema(X.schema)

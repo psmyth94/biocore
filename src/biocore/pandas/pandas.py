@@ -1,10 +1,10 @@
 from typing import Union
 
 import numpy as np
-import pandas as pd
-import pandas.api.types as pdt
 import pyarrow as pa
 
+import pandas as pd
+import pandas.api.types as pdt
 from biocore.utils.import_util import requires_backends
 from biocore.utils.inspect import (
     get_kwargs,
@@ -56,7 +56,16 @@ class PandasConverter(BaseDataConverter):
         return pa.Table.from_pandas(X, **pa_table_from_pandas_kwargs(kwargs))
 
     def to_dataset(self, X: Union[pd.DataFrame, pd.Series], **kwargs):
-        from biocore import Bioset
+        requires_backends(self.to_dataset, "datasets")
+        from datasets import Dataset
+
+        if isinstance(X, pd.Series):
+            X = X.to_frame(**get_kwargs(kwargs, X.to_frame))
+        return Dataset.from_pandas(X, **get_kwargs(kwargs, Dataset.from_pandas))
+
+    def to_bioset(self, X: Union[pd.DataFrame, pd.Series], **kwargs):
+        requires_backends(self.to_bioset, "biosets")
+        from biosets import Bioset
 
         if isinstance(X, pd.Series):
             X = X.to_frame(**get_kwargs(kwargs, X.to_frame))

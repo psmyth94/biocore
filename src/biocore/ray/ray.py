@@ -43,6 +43,7 @@ class RayConverter(ArrowConverter):
         requires_backends(self.to_polars, "ray")
         requires_backends(self.to_polars, "polars")
         import polars as pl
+
         import ray.data.dataset
 
         return pl.from_pandas(
@@ -98,7 +99,18 @@ class RayConverter(ArrowConverter):
         X: Union["ray.data.dataset.MaterializedDataset", "ray.data.dataset.Dataset"],
         **kwargs,
     ):
-        from biocore import Bioset
+        requires_backends(self.to_dataset, "datasets")
+        from datasets import Dataset
+
+        return Dataset(self.to_arrow(X, kwargs), **get_kwargs(kwargs, Dataset.__init__))
+
+    def to_bioset(
+        self,
+        X: Union["ray.data.dataset.MaterializedDataset", "ray.data.dataset.Dataset"],
+        **kwargs,
+    ):
+        requires_backends(self.to_bioset, "biosets")
+        from biosets import Bioset
 
         return Bioset(self.to_arrow(X, kwargs), **get_kwargs(kwargs, Bioset.__init__))
 
@@ -108,8 +120,9 @@ class RayConverter(ArrowConverter):
         **kwargs,
     ):
         requires_backends(self.to_dicts, ["ray", "datasets"])
-        import ray.data.dataset
         from datasets import IterableDataset
+
+        import ray.data.dataset
 
         def gen():
             for row in X.iter_rows(
@@ -157,6 +170,7 @@ class RayConverter(ArrowConverter):
         requires_backends(self.to_dask, "dask")
         requires_backends(self.to_dask, "ray")
         import dask.dataframe as dd
+
         import ray.data.dataset
 
         return dd.from_pandas(

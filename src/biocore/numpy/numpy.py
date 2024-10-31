@@ -1,8 +1,8 @@
-import numpy as np
 import pandas as pd
 import pandas.api.types as pdt
 import pyarrow as pa
 
+import numpy as np
 from biocore.utils import logging
 from biocore.utils.import_util import requires_backends
 from biocore.utils.inspect import (
@@ -76,7 +76,16 @@ class NumPyConverter(BaseDataConverter):
         )
 
     def to_dataset(self, X: np.ndarray, **kwargs):
-        from biocore import Bioset
+        requires_backends(self.to_dataset, "datasets")
+        from datasets import Dataset
+
+        return Dataset(
+            self.to_arrow(X, **kwargs), **get_kwargs(kwargs, Dataset.__init__)
+        )
+
+    def to_bioset(self, X: np.ndarray, **kwargs):
+        requires_backends(self.to_bioset, "biosets")
+        from biosets import Bioset
 
         return Bioset(self.to_arrow(X, **kwargs), **get_kwargs(kwargs, Bioset.__init__))
 

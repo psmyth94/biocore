@@ -48,6 +48,14 @@ class DatasetConverter(ArrowConverter):
     def to_dataset(self, X: "Dataset", **kwargs):
         return X
 
+    def to_bioset(self, X: "Dataset", **kwargs):
+        requires_backends(self.to_bioset, "biosets")
+        from biosets import Bioset
+
+        return Bioset(
+            X._data, info=X._info, fingerprint=X._fingerprint, indices_table=X._indices
+        )
+
     def to_iterabledataset(self, X: "Dataset", **kwargs):
         return X.to_iterable_dataset(**get_kwargs(kwargs, X.to_iterable_dataset))
 

@@ -111,7 +111,18 @@ class IterableDatasetConverter(DatasetConverter):
         return NotImplemented
 
     def to_dataset(self, X: "IterableDataset", **kwargs):
-        from biocore import Bioset
+        requires_backends(self.to_dataset, "datasets")
+        from datasets import Dataset
+
+        def gen(**gen_kwargs):
+            for row in X:
+                yield row
+
+        return Dataset.from_generator(gen, **get_kwargs(kwargs, Dataset.from_generator))
+
+    def to_bioset(self, X: "IterableDataset", **kwargs):
+        requires_backends(self.to_dataset, "biosets")
+        from biosets import Bioset
 
         def gen(**gen_kwargs):
             for row in X:

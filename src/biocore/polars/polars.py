@@ -40,7 +40,25 @@ class PolarsConverter(BaseDataConverter):
         return X.to_arrow()
 
     def to_dataset(self, X: Union["pl.DataFrame", "pl.Series"], **kwargs):
-        from biocore import Bioset
+        requires_backends(self.to_dataset, "biosets")
+        from datasets import Dataset
+
+        requires_backends(self.to_dataset, "polars")
+        import polars as pl
+
+        if isinstance(X, pl.Series):
+            return Dataset.from_pandas(
+                self.to_pandas(X.to_frame(), **kwargs),
+                **get_kwargs(kwargs, Dataset.from_pandas),
+            )
+
+        return Dataset.from_pandas(
+            self.to_pandas(X, **kwargs), **get_kwargs(kwargs, Dataset.from_pandas)
+        )
+
+    def to_bioset(self, X: Union["pl.DataFrame", "pl.Series"], **kwargs):
+        requires_backends(self.to_dataset, "biosets")
+        from biosets import Bioset
 
         requires_backends(self.to_dataset, "polars")
         import polars as pl

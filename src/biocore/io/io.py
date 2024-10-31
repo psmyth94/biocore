@@ -73,6 +73,15 @@ class IOConverter(BaseDataConverter):
         )
 
     def to_dataset(self, path, **kwargs):
+        requires_backends(self.to_dataset, "datasets")
+        from datasets import Dataset, DatasetInfo, Features
+
+        tbl = self.to_arrow(path, **kwargs)
+        features = Features.from_arrow_schema(tbl.schema)
+        info = DatasetInfo(features=features)
+        return Dataset(tbl, info=info)
+
+    def to_bioset(self, path, **kwargs):
         requires_backends(self.to_dataset, ["datasets", "biosets"])
         from biosets import Bioset
         from datasets import DatasetInfo, Features

@@ -50,7 +50,16 @@ class RowDictConverter(DictConverter):
         )
 
     def to_dataset(self, X: Dict[str, Any], **kwargs):
-        from biocore import Bioset
+        requires_backends(self.to_dataset, "datasets")
+        from datasets import Dataset
+
+        return Dataset.from_pandas(
+            self.to_pandas(X, **kwargs), **get_kwargs(kwargs, Dataset.from_pandas)
+        )
+
+    def to_bioset(self, X: Dict[str, Any], **kwargs):
+        requires_backends(self.to_bioset, "biosets")
+        from biosets import Bioset
 
         return Bioset.from_pandas(
             self.to_pandas(X, **kwargs), **get_kwargs(kwargs, Bioset.from_pandas)

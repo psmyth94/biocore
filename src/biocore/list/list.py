@@ -76,7 +76,17 @@ class ListConverter(BaseDataConverter):
         )
 
     def to_dataset(self, X, **kwargs):
-        from biocore import Bioset
+        requires_backends(self.to_dataset, "datasets")
+        from datasets import Dataset
+
+        input = self.to_pandas(X, **kwargs)
+        if isinstance(input, pd.Series):
+            input = input.to_frame()
+        return Dataset.from_pandas(input, **get_kwargs(kwargs, Dataset.from_pandas))
+
+    def to_bioset(self, X, **kwargs):
+        requires_backends(self.to_dataset, "biosets")
+        from biosets import Bioset
 
         input = self.to_pandas(X, **kwargs)
         if isinstance(input, pd.Series):

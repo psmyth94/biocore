@@ -70,7 +70,16 @@ class CSRConverter(BaseDataConverter):
         )
 
     def to_dataset(self, X: "sp.csr_matrix", **kwargs):
-        from biocore import Bioset
+        requires_backends(self.to_dataset, "datasets")
+        from datasets import Dataset
+
+        return Dataset(
+            self.to_arrow(X, **kwargs), **get_kwargs(kwargs, Dataset.__init__)
+        )
+
+    def to_bioset(self, X: "sp.csr_matrix", **kwargs):
+        requires_backends(self.to_dataset, "biosets")
+        from biosets import Bioset
 
         return Bioset(self.to_arrow(X, **kwargs), **get_kwargs(kwargs, Bioset.__init__))
 
