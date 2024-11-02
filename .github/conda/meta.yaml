@@ -17,12 +17,14 @@ requirements:
     - pandas
     - numpy >=1.17
     - pyarrow >=15.0.0
+    - packaging
   run:
     - python
     - pip
     - pandas
     - numpy >=1.17
     - pyarrow >=15.0.0
+    - packaging
 
 test:
   imports:
