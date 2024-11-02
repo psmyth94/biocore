@@ -1,8 +1,8 @@
 name: Conda - Release
 on:
   push:
-    tags:
-      - "[0-9]+.[0-9]+.[0-9]+*"
+    branch:
+      - conda-1.0.2-release
 env:
   ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
 jobs:
