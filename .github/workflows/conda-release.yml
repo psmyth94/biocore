@@ -7,7 +7,7 @@ env:
   ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
 jobs:
   build_and_package:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash -l {0}
@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Install miniconda
-        uses: conda-incubator/setup-miniconda@v2
+        uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
           auto-activate-base: false

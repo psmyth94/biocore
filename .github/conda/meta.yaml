@@ -32,10 +32,4 @@ about:
   home: https://github.com/psmyth94/biocore
   license: Apache-2.0
   license_file: LICENSE
-  summary: Bioinformatics tools for ML in bioinformatics
-  description: |
-    A helper library for common functions found in the bio-families of libraries.
-  keywords:
-    - omics
-    - machine learning
-    - bioinformatics
+  summary: A helper library for common functions found in the bio-families of libraries.
