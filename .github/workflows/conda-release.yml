@@ -33,4 +33,4 @@ jobs:
           conda build .github/conda
       - name: Upload to Anaconda
         run: |
-          anaconda upload `conda build .github/conda --output -c conda-forge` --force
+          conda install --solver=classic conda-forge::conda-libmamba-solver conda-forge::libmamba conda-forge::libmambapy conda-forge::libarchive
