@@ -1,27 +1,33 @@
 {% set name = "biocore" %}
+
 package:
   name: "{{ name|lower }}"
   version: "{{ BIOCORE_VERSION }}"
+
 source:
   path: ../../
+
 build:
   noarch: python
+
 requirements:
   host:
     - python
     - pip
     - pandas
-    - numpy>=1.17
-    - pyarrow>=15.0.0
+    - numpy >=1.17
+    - pyarrow >=15.0.0
   run:
     - python
     - pip
     - pandas
-    - numpy>=1.17
-    - pyarrow>=15.0.0
+    - numpy >=1.17
+    - pyarrow >=15.0.0
+
 test:
   imports:
     - biocore
+
 about:
   home: https://github.com/psmyth94/biocore
   license: Apache-2.0
