@@ -24,7 +24,7 @@ jobs:
           channels: conda-forge
       - name: Setup conda env
         run: |
-          conda install -c defaults -c conda-forge anaconda-client conda-build --solver=classic conda-libmamba-solver libmamba libmambapy libarchive
+          conda install --solver=classic -c defaults -c conda-forge anaconda-client conda-build conda-libmamba-solver libmamba libmambapy libarchive
       - name: Extract version
         run: echo "BIOCORE_VERSION=`python setup.py --version`" >> $GITHUB_ENV
       - name: Build conda packages
