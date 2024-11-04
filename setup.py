@@ -35,7 +35,7 @@ EXTRAS_REQUIRE = {
 
 setup(
     name="biocore",
-    version="1.0.2",  # expected format is one of x.y.z.dev0, or x.y.z.rc1 or x.y.z (no to dashes, yes to dots)
+    version="1.0.3",  # expected format is one of x.y.z.dev0, or x.y.z.rc1 or x.y.z (no to dashes, yes to dots)
     description="Bioinformatics datasets and tools for bio-family projects",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
