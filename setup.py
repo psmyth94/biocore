@@ -4,6 +4,7 @@ REQUIRED_PACKAGES = [
     "numpy>=1.17",
     "pandas",
     "pyarrow>=15.0.0",
+    "packaging",
 ]
 
 QUALITY_REQUIRE = ["ruff>=0.1.5"]
