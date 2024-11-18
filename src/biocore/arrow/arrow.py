@@ -1,9 +1,9 @@
 from typing import List, Union
 
+import numpy as np
 import pyarrow as pa
 import pyarrow.compute as pc
 
-import numpy as np
 from biocore.utils.import_util import (
     is_biosets_available,
     is_datasets_available,
@@ -138,6 +138,12 @@ class ArrowConverter(BaseDataConverter):
         from datasets import Dataset
 
         return Dataset(X, **get_kwargs(kwargs, Dataset.__init__))
+
+    def to_bioset(self, X: Union[pa.Array, pa.ChunkedArray, pa.Table], **kwargs):
+        requires_backends(self.to_bioset, "biosets")
+        from biosets import Bioset
+
+        return Bioset(X, **get_kwargs(kwargs, Bioset.__init__))
 
     def to_iterabledataset(
         self, X: Union[pa.Array, pa.ChunkedArray, pa.Table], **kwargs
