@@ -26,13 +26,12 @@ class IOConverter(BaseDataConverter):
             )
 
     def to_arrow(self, path, **kwargs):
-        requires_backends(self.to_arrow, "pyarrow")
         valid_ext = [".arrow", ".feather", ".parquet", ".json", ".csv"]
         ext = self.get_file_extension(path, **kwargs)
         self.validate_file(ext, valid_ext, **kwargs)
         if ext == ".arrow":
             if is_datasets_available():
-                from datasets import InMemoryTable
+                from datasets.table import InMemoryTable
 
                 return InMemoryTable.from_file(path).table
             else:
