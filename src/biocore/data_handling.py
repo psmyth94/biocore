@@ -13,6 +13,7 @@ from biocore.utils.import_util import (
     requires_backends,
 )
 from biocore.utils.inspect import InvalidColumnSelectionError
+from biocore.utils.py_util import is_dataset, is_iterable_dataset
 
 from .arrow import ArrowConverter
 from .base import BaseDataConverter, get_data_format
@@ -29,8 +30,8 @@ from .polars import PolarsConverter
 from .row_dict import RowDictConverter
 
 if TYPE_CHECKING:
-    from datasets import Dataset, IterableDataset
     from biosets import Bioset
+    from datasets import Dataset, IterableDataset
 
     import polars as pl
     import ray.data.dataset
@@ -594,9 +595,9 @@ class DataHandler:
 
     @staticmethod
     def iter(X, batch_size, drop_last_batch=False):
-        if isinstance(X, IterableDataset):
+        if is_iterable_dataset(X):
             return X.iter(batch_size, drop_last_batch=drop_last_batch)
-        if isinstance(X, Dataset):
+        if is_dataset(X):
             return X.iter(batch_size, drop_last_batch=drop_last_batch)
 
         format = get_data_format(X)
