@@ -6,6 +6,7 @@ import pyarrow as pa
 
 from biocore.utils.import_util import is_polars_available, requires_backends
 from biocore.utils.inspect import get_kwargs, pa_table_from_pandas_kwargs
+from biocore.utils.py_util import is_bioset
 
 from ..arrow import ArrowConverter
 
@@ -51,6 +52,9 @@ class DatasetConverter(ArrowConverter):
     def to_bioset(self, X: "Dataset", **kwargs):
         requires_backends(self.to_bioset, "biosets")
         from biosets import Bioset
+
+        if isinstance(X, Bioset):
+            return X
 
         return Bioset(
             X._data, info=X._info, fingerprint=X._fingerprint, indices_table=X._indices
@@ -243,7 +247,12 @@ class DatasetConverter(ArrowConverter):
         return X.iter(batch_size, drop_last_batch=drop_last_batch)
 
     def concat(self, tables, axis=0, **kwargs):
-        from biocore import concatenate_datasets
+        if is_bioset(tables[0]):
+            from biosets import concatenate_datasets
+
+            return concatenate_datasets(tables, axis=axis)
+
+        from datasets import concatenate_datasets
 
         return concatenate_datasets(tables, axis=axis)
 
