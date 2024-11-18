@@ -324,7 +324,7 @@ class PandasConverter(BaseDataConverter):
     def is_categorical(self, X, column, threshold=None):
         ser = self.select_column(X, column)
 
-        if isinstance(ser.dtype, pd.CategoricalDtype) or pd.api.types.is_string_dtype(
+        if isinstance(ser.dtypes, pd.CategoricalDtype) or pd.api.types.is_string_dtype(
             ser.dtype
         ):
             return True
