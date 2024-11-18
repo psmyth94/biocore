@@ -118,3 +118,9 @@ from .import_util import (
     torch_only_method,
 )
 from .inspect import get_kwargs
+from .py_util import (
+    is_bioset,
+    is_dataset,
+    is_dataset_dict,
+    is_iterable_dataset,
+)
