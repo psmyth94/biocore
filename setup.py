@@ -47,7 +47,7 @@ setup(
     package_dir={"": "src"},
     packages=find_packages("src"),
     include_package_data=True,
-    python_requires=">=3.8.0,<3.12.0",
+    python_requires=">=3.8.0",
     install_requires=REQUIRED_PACKAGES,
     extras_require=EXTRAS_REQUIRE,
     zip_safe=False,  # Required for mypy to find the py.typed file
